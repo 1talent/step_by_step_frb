@@ -29,7 +29,7 @@ late final api = SrcRustImpl(dylib);
 ```
 
 
-## 2. For IOS 
+## 2. Setup IOS 
 
  *  run this command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h`.
 
@@ -45,3 +45,12 @@ return super.application(application, didFinishLaunchingWithOptions: launchOptio
 
 
 * open the ios folder in xcode. in second Runner( Build Phases) add lib.a in Link Binary With Libraries && ignore arm64 only in second Runner build_settings.
+
+## 3. Setup Android
+
+* run command in src_rust folder `cargo install cargo-ndk && cargo ndk -o ../android/app/src/main/jniLibs build` ( make sure you sucessfully install NDK)
+
+
+## 4. Setup Macos
+
+*
