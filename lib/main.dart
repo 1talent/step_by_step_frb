@@ -62,6 +62,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  String text = "Hello from Nothing";
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -73,8 +75,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void call_some_text(){
+    setState(() async {
+         text = await  api.showSomeText();
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    call_some_text();
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -107,13 +118,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+             Text(
+              text,
+            )
           ],
         ),
       ),
