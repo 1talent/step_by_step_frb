@@ -40,4 +40,4 @@ return super.application(application, didFinishLaunchingWithOptions: launchOptio
 ```
 
 
-step 4: open the ios folder in xcode. in second Runner( Build Phases) add lib.a in Link Binary With Libraries.
+step 4: open the ios folder in xcode. in second Runner( Build Phases) add lib.a in Link Binary With Libraries && ignore arm64 in secon Runner build_settings.

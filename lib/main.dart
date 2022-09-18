@@ -75,11 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void call_some_text(){
-    setState(() async {
-         text = await  api.showSomeText();
-
-    });
+  Future<void> call_some_text() async {
+     String result = await  api.showSomeText();
+     setState(() {
+        text = result;
+     });
   }
 
   @override
