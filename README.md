@@ -53,4 +53,17 @@ return super.application(application, didFinishLaunchingWithOptions: launchOptio
 
 ## 4. Setup Macos
 
-*
+* run command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c macos/Runner/bridge_generated.h`
+
+* there is no .h file to import bridge_generate.h so we have to use another way. in xcode second Runner Build Settings tab, set the Objective-C Bridging Header to be Runner/bridge_generated.h. And add dummy method same as we did in ios setup part.
+
+* run command `cargo install cargo-xcode && cargo xcode` and i will generate *.xcodeproj folder. do not open it util open macos folder in xcode and then copy *.xcodeproj and paste under Runner.
+
+* Xcode second Runner tab , Build Phases tab in Dependencies add  step-by-step-frb-cdylib(.cdylib file) that you copy  under the Runner folder.
+
+* Xcode second Runner tab , Build Phases tab in Link Binary with Libraries add step_by_step_frb.dylib (.dylib file).
+
+
+
+
+
