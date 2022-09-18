@@ -1,11 +1,14 @@
-Initializing Rust.
+## 1.Initializing Rust
 
-step 1. create src_rust folder & run `cargo init` command.
-step 2. add crate-type(staticlib for ios and cdylib for otherplatform) under lib and flutter_rust_bridge under dependencies in cargo.toml.
-step 3. create lib.rs and api.rs under src_rust/src folder.
-step 4. run command `flutter pub add ffi flutter_rust_bridge && flutter pub add ffigen --dev && flutter pub global activate ffigen` and install llvm.
-step 5. run command `cargo install flutter_rust_bridge_codegen cbindgen`
-step 6. copy this code in main.dart to load the rust builds.
+* create src_rust folder & run `cargo init` command.
+
+* add crate-type(staticlib for ios and cdylib for other platform) under lib and flutter_rust_bridge under dependencies in cargo.toml.
+
+* run command `flutter pub add ffi flutter_rust_bridge && flutter pub add ffigen --dev && flutter pub global activate ffigen` and then install llvm.
+
+* run command `cargo install flutter_rust_bridge_codegen cbindgen`
+
+* copy this code in main.dart to load the rust builds.
 
 ```
 import 'dart:ffi';
@@ -26,12 +29,13 @@ late final api = SrcRustImpl(dylib);
 ```
 
 
-For IOS 
+## 2. For IOS 
 
-step 1: run this command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h`.
-step 2:  got to src_rust folder and run `cargo lipo && cp target/universal/debug/libstep_by_step_frb.a ../ios/Runner`
+ *  run this command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h`.
 
-step 3: import brider_generated.h in Runner-Bridging-Header.h file & add dummy method in AppDelegate.swift file. 
+* go to src_rust folder and run `cargo lipo && cp target/universal/debug/libstep_by_step_frb.a ../ios/Runner`
+
+* import brider_generated.h in Runner-Bridging-Header.h file & add dummy method in AppDelegate.swift file. 
 ```
 GeneratedPluginRegistrant.register(with: self)
 print("dummy_value=\(dummy_method_to_enforce_bundling())");
@@ -40,4 +44,4 @@ return super.application(application, didFinishLaunchingWithOptions: launchOptio
 ```
 
 
-step 4: open the ios folder in xcode. in second Runner( Build Phases) add lib.a in Link Binary With Libraries && ignore arm64 in secon Runner build_settings.
+* open the ios folder in xcode. in second Runner( Build Phases) add lib.a in Link Binary With Libraries && ignore arm64 only in second Runner build_settings.
