@@ -1,6 +1,6 @@
 ## 1.Initializing Rust
 
-* create src_rust folder & run `cargo init` command.
+* Run this when starting a new project only: create src_rust folder & run `cargo init` command.
 
 * add crate-type(staticlib for ios and cdylib for other platform) under lib and flutter_rust_bridge under dependencies in cargo.toml.
 
@@ -28,8 +28,7 @@ late final dylib = Platform.isIOS
 late final api = SrcRustImpl(dylib);
 ```
 
-
-## 2. Setup IOS 
+## 2. Setup iOS 
 
  *  run this command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h`.
 
