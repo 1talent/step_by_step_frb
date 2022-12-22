@@ -24,7 +24,7 @@ rustup target add \
 
 * run command `flutter pub add ffi flutter_rust_bridge && flutter pub add ffigen --dev && flutter pub global activate ffigen` and then install llvm.
 
-* run command `cargo install flutter_rust_bridge_codegen cbindgen`
+* run command `cargo install flutter_rust_bridge_codegen`
 
 * copy this code in main.dart to load the rust builds.
 
@@ -48,11 +48,28 @@ late final api = SrcRustImpl(dylib);
 
 ## 2. Setup iOS 
 
-* run this command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h`.
+1. Generates bindings code between Rust and Flutter, also utilities for Xcode.
 
-* go to src_rust folder and run `cargo lipo && cp target/universal/debug/libstep_by_step_frb.a ../ios/Runner`
+```sh
+flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h
+```
 
-* import bridge_generated.h in Runner-Bridging-Header.h file & add dummy method in AppDelegate.swift file likes below:
+2. Add `lib` target in `Cagro.toml` likes below:
+
+```toml
+[lib]
+name = "personal_finance_frb"
+crate-type = ["staticlib", "lib"]
+```
+
+3. Builds Rust code into `lib.a` and copies the `lib.a` into `Runner` directory so that Xcode can search for the lib while linking
+
+```sh
+cd src_rust \
+cargo lipo && cp target/universal/debug/libstep_by_step_frb.a ../ios/Runner 
+```
+
+3. Import `bridge_generated.h` in `Runner-Bridging-Header.h` file & add dummy method in `AppDelegate.swift` file likes below:
 
 ```swift
 GeneratedPluginRegistrant.register(with: self)
@@ -62,7 +79,8 @@ return super.application(application, didFinishLaunchingWithOptions: launchOptio
 ```
 
 
-* open the ios folder in xcode. in second Runner( Build Phases) add lib.a in Link Binary With Libraries && ignore arm64 only in second Runner build_settings.
+4. Open the `ios` folder in Xcode, in **Targets** > **Runner** > **Build Phases** tab, check the `lib.a` was in **Link Binary With Libraries**.
+(If there's error maybe we should ignore arm64 only in **Targets** > **Runner** > **Build Settings**)
 
 ## 3. Setup Android
 
