@@ -2,6 +2,24 @@
 
 * Run this when starting a new project only: create src_rust folder & run `cargo init` command.
 
+* Install target for different platforms:
+
+```sh
+# Android
+rustup target add \
+    aarch64-linux-android \
+    armv7-linux-androideabi \
+    x86_64-linux-android \
+    i686-linux-android
+    
+# IOS
+rustup target add \ 
+    aarch64-apple-ios \
+    x86_64-apple-ios \ 
+    aarch64-apple-ios-sim \
+```
+
+
 * add crate-type(staticlib for ios and cdylib for other platform) under lib and flutter_rust_bridge under dependencies in cargo.toml.
 
 * run command `flutter pub add ffi flutter_rust_bridge && flutter pub add ffigen --dev && flutter pub global activate ffigen` and then install llvm.
@@ -30,12 +48,13 @@ late final api = SrcRustImpl(dylib);
 
 ## 2. Setup iOS 
 
- *  run this command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h`.
+* run this command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h`.
 
 * go to src_rust folder and run `cargo lipo && cp target/universal/debug/libstep_by_step_frb.a ../ios/Runner`
 
-* import brider_generated.h in Runner-Bridging-Header.h file & add dummy method in AppDelegate.swift file. 
-```
+* import bridge_generated.h in Runner-Bridging-Header.h file & add dummy method in AppDelegate.swift file likes below:
+
+```swift
 GeneratedPluginRegistrant.register(with: self)
 print("dummy_value=\(dummy_method_to_enforce_bundling())");
 return super.application(application, didFinishLaunchingWithOptions: launchOptions)
