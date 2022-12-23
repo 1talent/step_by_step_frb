@@ -2,6 +2,12 @@
 
 * Run this when starting a new project only: create src_rust folder & run `cargo init` command.
 
+* Install Cargo tools:
+
+```sh
+cargo install cargo-xcode cargo-lip
+```
+
 * Install target for different platforms:
 
 ```sh
@@ -69,13 +75,12 @@ cd src_rust \
 cargo lipo && cp target/universal/debug/libstep_by_step_frb.a ../ios/Runner 
 ```
 
-3. Import `bridge_generated.h` in `Runner-Bridging-Header.h` file & add dummy method in `AppDelegate.swift` file likes below:
+3. Declares `#import "bridge_generated.h"` in `Runner-Bridging-Header.h` file & add dummy method in `AppDelegate.swift` file likes below:
 
 ```swift
 GeneratedPluginRegistrant.register(with: self)
-print("dummy_value=\(dummy_method_to_enforce_bundling())");
+print("dummy_value=\(dummy_method_to_enforce_bundling())"); // add dummy method here
 return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-
 ```
 
 
@@ -89,17 +94,34 @@ return super.application(application, didFinishLaunchingWithOptions: launchOptio
 
 ## 4. Setup Macos
 
-* run command `flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c macos/Runner/bridge_generated.h`
+1. Generates bindings code between Rust and Flutter, also utilities for Xcode.
 
-* there is no .h file to import bridge_generate.h so we have to use another way. in xcode second Runner Build Settings tab, set the Objective-C Bridging Header to be Runner/bridge_generated.h. And add dummy method same as we did in ios setup part.
+```sh
+flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c macos/Runner/bridge_generated.h
+```
 
-* run command `cargo install cargo-xcode && cargo xcode` and i will generate *.xcodeproj folder. do not open it util open macos folder in xcode and then copy *.xcodeproj and paste under Runner.
+2. There is no bridging header file to tell Xcode about our `bridge generated` code. We have to tell Xcode another way, in **Targets** > **Runner** > **Build Settings** tab, set the **Objective-C Bridging Header** to be **Runner/bridge_generated.h**. And add dummy method same as we did in ios setup part:
 
-* Xcode second Runner tab , Build Phases tab in Dependencies add  step-by-step-frb-cdylib(.cdylib file) that you copy  under the Runner folder.
+```swift
+// ...
+override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+    print("dummy_value=\(dummy_method_to_enforce_bundling())"); // add dummy method here
+    return false
+  }
+// ...  
+```
 
-* Xcode second Runner tab , Build Phases tab in Link Binary with Libraries add step_by_step_frb.dylib (.dylib file).
+3. Run `cargo xcode` within Rust directory and it will generate `*.xcodeproj` folder inside Rust project directory. DO NOT open it util you add generated `*.xcodeproj` under `macos` Xcode project.
 
+![not found](./img/add_xcodeproj.png)
 
+4. Linking the libs by opening **Targets** > **Runner** > **Build Phases** tab:
+
+- In **Dependencies** add dynamic lib `step-by-step-frb-cdylib(.cdylib file)`.
+
+- In **Link Binary** with Libraries add static lib `step_by_step_frb.a (.a file)`.
+
+![not found](./img/build_phases.png)
 
 
 
