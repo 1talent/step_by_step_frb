@@ -21,11 +21,13 @@ rustup target add \
     armv7-linux-androideabi \
     x86_64-linux-android \
     i686-linux-android
-    
+```
+
+```sh
 # iOS
-rustup target add \ 
+rustup target add \
     aarch64-apple-ios \
-    x86_64-apple-ios \ 
+    x86_64-apple-ios \
     aarch64-apple-ios-sim
 ```
 
