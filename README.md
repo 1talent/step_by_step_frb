@@ -18,23 +18,36 @@ rustup target add \
     x86_64-linux-android \
     i686-linux-android
     
-# IOS
+# iOS
 rustup target add \ 
     aarch64-apple-ios \
     x86_64-apple-ios \ 
-    aarch64-apple-ios-sim \
+    aarch64-apple-ios-sim
 ```
 
+* add crate-type(staticlib for ios and cdylib for other platform) under lib and `flutter_rust_bridge` under dependencies in cargo.toml.
 
-* add crate-type(staticlib for ios and cdylib for other platform) under lib and flutter_rust_bridge under dependencies in cargo.toml.
+* run command 
 
-* run command `flutter pub add ffi flutter_rust_bridge && flutter pub add ffigen --dev && flutter pub global activate ffigen` and then install llvm.
+```sh
+flutter pub add ffi flutter_rust_bridge
+flutter pub add ffigen --dev
+flutter pub global activate ffigen
 
-* run command `cargo install flutter_rust_bridge_codegen`
+# and then install llvm.
+```
+
+* run command
+
+```sh
+# install the flutter_rust_bridge_codegen binary
+# in ~/.cargo/bin/flutter_rust_bridge_codegen
+cargo install flutter_rust_bridge_codegen
+```
 
 * copy this code in main.dart to load the rust builds.
 
-```
+```dart
 import 'dart:ffi';
 import 'dart:io';
 
