@@ -1,8 +1,10 @@
 # Step by Step with frb
 
-## 1.Initializing Rust
+## 1.Initialize Rust
 
-* Run this when starting a new project only: create src_rust folder & run `cargo init` command.
+Run this when starting a new project only. Otherwise, skip to step 2.
+
+Create `src_rust` folder & run `cargo init` command.
 
 ## 2. Install Cargo Tools
 
