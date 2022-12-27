@@ -1,14 +1,16 @@
+# Step by Step with frb
+
 ## 1.Initializing Rust
 
 * Run this when starting a new project only: create src_rust folder & run `cargo init` command.
 
-* Install Cargo tools:
+## 2. Install Cargo Tools
 
 ```sh
 cargo install cargo-xcode cargo-lipo
 ```
 
-* Install target for different platforms:
+## 3. Install target for different platforms
 
 ```sh
 # Android
@@ -25,9 +27,11 @@ rustup target add \
     aarch64-apple-ios-sim
 ```
 
-* add crate-type(staticlib for ios and cdylib for other platform) under lib and `flutter_rust_bridge` under dependencies in cargo.toml.
+## 4. Update Cargo.toml to use frb
 
-* run command 
+Add crate-type(staticlib for ios and cdylib for other platform) under lib and `flutter_rust_bridge` under dependencies in `Cargo.toml`.
+
+Run these commands.
 
 ```sh
 flutter pub add ffi flutter_rust_bridge
@@ -37,7 +41,7 @@ flutter pub global activate ffigen
 # and then install llvm.
 ```
 
-* run command
+Install `flutter_rust_bridge_codegen` binary:
 
 ```sh
 # install the flutter_rust_bridge_codegen binary
@@ -45,7 +49,7 @@ flutter pub global activate ffigen
 cargo install flutter_rust_bridge_codegen
 ```
 
-* copy this code in main.dart to load the rust builds.
+Copy this code in `main.dart` to load the rust builds:
 
 ```dart
 import 'dart:ffi';
@@ -65,7 +69,7 @@ late final dylib = Platform.isIOS
 late final api = SrcRustImpl(dylib);
 ```
 
-## 2. Setup iOS 
+## 5. Setup iOS 
 
 1. Generates bindings code between Rust and Flutter, also utilities for Xcode.
 
@@ -73,7 +77,7 @@ late final api = SrcRustImpl(dylib);
 flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart -c ios/Runner/bridge_generated.h
 ```
 
-2. Add `lib` target in `Cagro.toml` likes below:
+2. Add `lib` target in `Cargo.toml` likes below:
 
 ```toml
 [lib]
@@ -88,7 +92,7 @@ cd src_rust \
 cargo lipo && cp target/universal/debug/libstep_by_step_frb.a ../ios/Runner 
 ```
 
-3. Declares `#import "bridge_generated.h"` in `Runner-Bridging-Header.h` file & add dummy method in `AppDelegate.swift` file likes below:
+4. Declares `#import "bridge_generated.h"` in `Runner-Bridging-Header.h` file & add dummy method in `AppDelegate.swift` file likes below:
 
 ```swift
 GeneratedPluginRegistrant.register(with: self)
@@ -96,16 +100,19 @@ print("dummy_value=\(dummy_method_to_enforce_bundling())"); // add dummy method 
 return super.application(application, didFinishLaunchingWithOptions: launchOptions)
 ```
 
-
-4. Open the `ios` folder in Xcode, in **Targets** > **Runner** > **Build Phases** tab, check the `lib.a` was in **Link Binary With Libraries**.
+5. Open the `ios` folder in Xcode, in **Targets** > **Runner** > **Build Phases** tab, check the `lib.a` was in **Link Binary With Libraries**.
 (If there's error maybe we should ignore arm64 only in **Targets** > **Runner** > **Build Settings**)
 
-## 3. Setup Android
+## 6. Setup Android
 
-* run command in src_rust folder `cargo install cargo-ndk && cargo ndk -o ../android/app/src/main/jniLibs build` ( make sure you sucessfully install NDK)
+Run command in `src_rust` folder 
 
+```sh
+cargo install cargo-ndk && cargo ndk -o ../android/app/src/main/jniLibs build`
+# make sure you sucessfully install NDK)
+```
 
-## 4. Setup Macos
+## 7. Setup macOS
 
 1. Generates bindings code between Rust and Flutter, also utilities for Xcode.
 
@@ -135,6 +142,3 @@ override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplic
 - In **Link Binary** with Libraries add static lib `step_by_step_frb.a (.a file)`.
 
 ![not found](./img/build_phases.png)
-
-
-
