@@ -5,7 +5,7 @@
 * Install Cargo tools:
 
 ```sh
-cargo install cargo-xcode cargo-lip
+cargo install cargo-xcode cargo-lipo
 ```
 
 * Install target for different platforms:
