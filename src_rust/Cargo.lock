@@ -195,14 +195,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5f07a4f429191b4e4c35333ca0f4c5ce351ca8d9788386df66ecead4b0dcc891"
 
 [[package]]
-name = "frb_finance"
-version = "0.1.0"
-dependencies = [
- "flutter_rust_bridge",
- "flutter_rust_bridge_macros",
-]
-
-[[package]]
 name = "hermit-abi"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -386,6 +378,14 @@ name = "smallvec"
 version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a507befe795404456341dfab10cef66ead4c041f62b8b11bbb92bffe5d0953e0"
+
+[[package]]
+name = "step_by_step_frb"
+version = "0.1.0"
+dependencies = [
+ "flutter_rust_bridge",
+ "flutter_rust_bridge_macros",
+]
 
 [[package]]
 name = "syn"
