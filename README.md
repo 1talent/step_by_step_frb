@@ -148,7 +148,7 @@ override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplic
 ![not found](./img/build_phases.png)
 
 
-## 7. Setup linux
+## 8. Setup linux
 
 1. Generates bindings code between Rust and Flutter.
 
