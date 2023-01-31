@@ -1,0 +1,15 @@
+[package]
+name = "step_by_step_frb"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "step_by_step_frb"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[dependencies]
+
+flutter_rust_bridge = "=1.56.0"
+flutter_rust_bridge_macros = "=1.56.0"

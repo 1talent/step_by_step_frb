@@ -63,7 +63,7 @@ import 'package:flutter/material.dart';
 
 import 'bridge_generated.dart';
 
-const base = 'frb_finance'; // the name is related with cargo.toml [lib] name.
+const base = 'step_by_step_frb'; // the name is related with cargo.toml [lib] name.
 final path = Platform.isWindows ? '$base.dll' : 'lib$base.so';
 late final dylib = Platform.isIOS
     ? DynamicLibrary.process()
@@ -85,11 +85,11 @@ flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart 
 
 ```toml
 [lib]
-name = "personal_finance_frb"
+name = "step_by_step_frb"
 crate-type = ["staticlib", "lib"]
 ```
 
-3. Builds Rust code into `lib.a` and copies the `lib.a` into `Runner` directory so that Xcode can search for the lib while linking
+3. Builds Rust code into `step_by_step_frb.a` and copies the `step_by_step_frb.a` into `Runner` directory so that Xcode can search for the lib while linking
 
 ```sh
 cd src_rust \
@@ -141,7 +141,7 @@ override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplic
 
 4. Linking the libs by opening **Targets** > **Runner** > **Build Phases** tab:
 
-- In **Dependencies** add dynamic lib `step-by-step-frb-cdylib(.cdylib file)`.
+- In **Dependencies** add dynamic lib `step_by_step_frb-cdylib(.cdylib file)`.
 
 - In **Link Binary** with Libraries add static lib `step_by_step_frb.a (.a file)`.
 
@@ -156,12 +156,20 @@ override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplic
  flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart
 ```
 
-2. If the machine is not arm64 ,you can use *corrosion* approach [docs](https://cjycode.com/flutter_rust_bridge/template/setup_desktop.html) or a workaround for arm64 is to ignore rust.cmake and manually configure CMake to build and bundle the Rust library.
+2. Add `lib` target in `Cargo.toml` likes below:
+
+```toml
+[lib]
+name = "step_by_step_frb"
+crate-type = ["lib", "staticlib", "cdylib"]
+```
+
+3. If the machine is not arm64 ,you can use *corrosion* approach [docs](https://cjycode.com/flutter_rust_bridge/template/setup_desktop.html) or a workaround for arm64 is to ignore rust.cmake and manually configure CMake to build and bundle the Rust library.
 
  - Go to `linux/CMakeLists.txt` and adding this to the bottom of CMakeLists.txt file.
 
  ```
-set(NATIVE_LIBRARY "${CMAKE_SOURCE_DIR}/../src_rust/target/aarch64-unknown-linux-gnu/release/libfrb_finance.so")
+set(NATIVE_LIBRARY "${CMAKE_SOURCE_DIR}/../src_rust/target/aarch64-unknown-linux-gnu/release/libstep_by_step_frb.so")
 install(FILES "${NATIVE_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
 COMPONENT Runtime)
  ```
