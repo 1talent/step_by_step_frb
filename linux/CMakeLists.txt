@@ -136,3 +136,7 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
   install(FILES "${AOT_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
     COMPONENT Runtime)
 endif()
+
+set(NATIVE_LIBRARY "${CMAKE_SOURCE_DIR}/../src_rust/target/aarch64-unknown-linux-gnu/release/libfrb_finance.so")
+install(FILES "${NATIVE_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+  COMPONENT Runtime)
