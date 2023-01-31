@@ -146,3 +146,28 @@ override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplic
 - In **Link Binary** with Libraries add static lib `step_by_step_frb.a (.a file)`.
 
 ![not found](./img/build_phases.png)
+
+
+## 7. Setup linux
+
+1. Generates bindings code between Rust and Flutter.
+
+```sh
+ flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart
+```
+
+2. If the machine is not arm64 ,you can use *corrosion* approach [docs](https://cjycode.com/flutter_rust_bridge/template/setup_desktop.html) or a workaround for arm64 is to ignore rust.cmake and manually configure CMake to build and bundle the Rust library.
+
+ - Go to `linux/CMakeLists.txt` and adding this to the bottom of CMakeLists.txt file.
+
+ ```
+set(NATIVE_LIBRARY "${CMAKE_SOURCE_DIR}/../src_rust/target/aarch64-unknown-linux-gnu/release/libfrb_finance.so")
+install(FILES "${NATIVE_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+COMPONENT Runtime)
+ ```
+
+ -  Generate .so build from terminal.
+
+  ```sh
+   cargo build --target aarch64-unknown-linux-gnu --release
+  ```
