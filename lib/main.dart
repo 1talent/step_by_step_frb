@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'bridge_generated.dart';
 
-const base = 'step_by_step_frb'; // the name is related with cargo.toml [lib] name.
+const base = 'src_rust'; // the name is related with cargo.toml [lib] name.
 final path = Platform.isWindows ? '$base.dll' : 'lib$base.so';
 final dylib = Platform.isIOS
     ? DynamicLibrary.process()
