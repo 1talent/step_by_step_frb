@@ -148,7 +148,7 @@ late final api = SrcRustImpl(dylib);
 
 ![not found](./img/build_phases.png)
 
-## 8. Setup linux
+## 8. Setup Linux
 
 1. Generates bindings code between Rust and Flutter.
 
@@ -179,3 +179,44 @@ late final api = SrcRustImpl(dylib);
      ```sh
     cargo build --target aarch64-unknown-linux-gnu --release
      ```
+
+## 9. Setup Window
+
+1. Generates bindings code between Rust and Flutter.
+
+    ```sh
+    flutter_rust_bridge_codegen -r src_rust/src/api.rs -d lib/bridge_generated.dart
+    ```
+
+2. **Note that**: There are two options. **First option**
+   is installing corrosion directly & use it and **Second option** is installing corrosion into the
+   machine system.
+
+   **First Option**
+
+    1. Create rust.cmake and add these.
+
+        ```text
+
+            include(FetchContent)
+            FetchContent_Declare(
+                Corrosion
+                GIT_REPOSITORY https://github.com/AndrewGaspar/corrosion.git
+                GIT_TAG origin/master # Optionally specify a version tag or branch here
+            )
+            FetchContent_MakeAvailable(Corrosion)
+            corrosion_import_crate(MANIFEST_PATH ../src_rust/Cargo.toml)
+            # Flutter-specific
+            set(CRATE_NAME "step")
+            target_link_libraries(${BINARY_NAME} PRIVATE ${CRATE_NAME})
+            list(APPEND PLUGIN_BUNDLED_LIBRARIES $<TARGET_FILE:${CRATE_NAME}-shared>)
+
+        ```
+
+    2. include rust.cmake inside CMakeLists.txt.
+
+       ```text
+
+        include(./rust.cmake)
+
+       ```
