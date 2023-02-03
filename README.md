@@ -113,7 +113,7 @@ late final api = SrcRustImpl(dylib);
    Run command in `src_rust` folder
 
    ```sh
-    cargo install cargo-ndk && cargo ndk -t x86 -t armeabi-v7a -t arm64-v8a -t x86_64 -o ../android/app/src/main/jniLibs build`
+    cargo install cargo-ndk && cargo ndk -t x86 -t armeabi-v7a -t arm64-v8a -t x86_64 -o ../android/app/src/main/jniLibs build
     # make sure you sucessfully install NDK)
    ```
 
