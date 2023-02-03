@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'bridge_generated.dart';
 
-const base = 'src_rust'; // the name is related with cargo.toml [lib] name.
+const base = 'step'; // the name is related with cargo.toml [lib] name.
 final path = Platform.isWindows ? '$base.dll' : 'lib$base.so';
 final dylib = Platform.isIOS
     ? DynamicLibrary.process()
@@ -19,15 +19,14 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Frb',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Step By Step'),
     );
   }
 }

@@ -5,7 +5,7 @@ corrosion_import_crate(MANIFEST_PATH ../src_rust/Cargo.toml)
 
 # Flutter-specific
 
-set(CRATE_NAME "src_rust")
+set(CRATE_NAME "step")
 
 target_link_libraries(${BINARY_NAME} PRIVATE ${CRATE_NAME})
 
