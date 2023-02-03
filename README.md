@@ -192,9 +192,9 @@ late final api = SrcRustImpl(dylib);
    is installing corrosion directly & use it and **Second option** is installing corrosion into the
    machine system.
 
-   **First Option**
+   - **First Option**
 
-    1. Create rust.cmake and add these.
+    1. Create rust.cmake inside `windows` folder and add this.
 
         ```text
 
@@ -218,5 +218,43 @@ late final api = SrcRustImpl(dylib);
        ```text
 
         include(./rust.cmake)
+
+       ```
+
+   - **Second Option**
+
+    1. Install Corrosion.
+
+       ``` sh
+        # make sure cmake is installed.
+        git clone https://github.com/corrosion-rs/corrosion.git
+
+        cmake -Scorrosion -Bbuild -DCMAKE_BUILD_TYPE=Release
+
+        cmake --build build --config Release
+
+        cmake --install build --config Release
+
+       ```
+
+    2. Create mrrust.cmake inside `windows` folder add this.
+
+        ```text
+
+            find_package(Corrosion REQUIRED)
+            corrosion_import_crate(MANIFEST_PATH ../src_rust/Cargo.toml)
+
+            # Flutter-specific
+
+            set(CRATE_NAME "step")
+            target_link_libraries(${BINARY_NAME} PRIVATE ${CRATE_NAME})
+            list(APPEND PLUGIN_BUNDLED_LIBRARIES $<TARGET_FILE:${CRATE_NAME}-shared>)
+        ```
+
+    3. include mrrust.cmake inside CMakeLists.txt.
+
+       ```text
+
+        include(./mrrust.cmake)
 
        ```
