@@ -33,4 +33,4 @@ Runner/GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 
-Runner/libstep_by_step_frb.a
+Runner/*.a

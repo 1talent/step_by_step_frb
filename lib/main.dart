@@ -11,7 +11,7 @@ final dylib = Platform.isIOS
     : Platform.isMacOS
         ? DynamicLibrary.executable()
         : DynamicLibrary.open(path);
- final api = FrbFinanceImpl(dylib);
+final api = StepImpl(dylib);
 void main() {
   runApp(const MyApp());
 }
@@ -41,20 +41,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   String text = "Hello from Nothing";
 
-
   Future<void> callSomeText() async {
-     String result = await  api.showSomeText();
-     setState(() {
-        text = result;
-     });
+    String result = await api.showSomeText();
+    setState(() {
+      text = result;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     callSomeText();
 
     return Scaffold(
@@ -65,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-             Text(
+            Text(
               text,
             )
           ],
