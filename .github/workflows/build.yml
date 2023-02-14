@@ -239,7 +239,7 @@ jobs:
           rustup target add x86_64-apple-ios
       - name: install cargo lipo
         if: steps.cache-lipo.outputs.cache-hit != 'true'
-        run: task cargo:cargo_lipo
+        run: task --version
       - name: generate ios build from rust
         run: task build_ios
       - name: build ios
