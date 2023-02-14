@@ -94,48 +94,7 @@ jobs:
   #     - name: build window
   #       run: flutter build windows
 
-  # build-macos:
-  #   runs-on: macos-latest
-  #   steps:
-  #     - uses: actions/cache@v3
-  #       id: cache-deps
-  #       with:
-  #         path: |
-  #           /Users/runner/hostedtoolcache/flutter
-  #           ~/.cargo/bin/
-  #           ~/.cargo/registry/index/
-  #           ~/.cargo/registry/cache/
-  #           ~/.cargo/git/db/
-  #         key: ${{ runner.OS }}-cargo-install-cache-v1}}
-  #     - uses: actions/cache@v3
-  #       id: cargo-xcode
-  #       with:
-  #         path: |
-  #           ~/.cargo/bin/cargo-xcode
-  #         key: ${{ runner.OS }}-cargo-xcode-cache-${{env.cargo_xcode}}
-  #     - uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: "3.3.10"
-  #         channel: "stable"
-  #     - uses: actions/checkout@v3
-  #     - name: Clean & Get Flutter dependencies
-  #       run: |
-  #         flutter clean
-  #         flutter pub get
-  #     - name: Setup | Rust
-  #       uses: ATiltedTree/setup-rust@v1
-  #       with:
-  #         rust-version: stable
-  #         components: clippy
-  #     - name: install cargo xcode
-  #       if: steps.cargo-xcode.outputs.cache-hit != 'true'
-  #       run: cargo install cargo-xcode
-  #     - name: generate macos build from rust
-  #       run: make macos-build
-  #     - name: build macos
-  #       run: flutter build macos --verbose
-
-  build-android:
+  build-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/cache@v3
@@ -149,24 +108,20 @@ jobs:
             ~/.cargo/git/db/
           key: ${{ runner.OS }}-cargo-install-cache-v1}}
       - uses: actions/cache@v3
-        id: cargo-ndk
+        id: cargo-xcode
         with:
           path: |
-            ~/.cargo/bin/cargo-ndk
-          key: ${{ runner.OS }}-cargo-ndk-cache-${{env.cargo_ndk}}
+            ~/.cargo/bin/cargo-xcode
+          key: ${{ runner.OS }}-cargo-xcode-cache-${{env.cargo_xcode}}
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.3.10"
           channel: "stable"
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: "12.x"
       - uses: actions/checkout@v3
       - name: Install Task
         run: |
           sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
-          echo "${HOME}/.local/bin" >> $GITHUB_PATH
+          echo "${HOME}/.local/bin" >> $GITHUB_PATH      
       - name: Clean & Get Flutter dependencies
         run: |
           flutter clean
@@ -176,20 +131,69 @@ jobs:
         with:
           rust-version: stable
           components: clippy
-      - name: rustup target
-        run: |
-          rustup show
-          rustup target add aarch64-linux-android
-          rustup target add armv7-linux-androideabi
-          rustup target add x86_64-linux-android
-          rustup target add i686-linux-android
-      - name: install cargo ndk
-        if: steps.cargo-ndk.outputs.cache-hit != 'true'
-        run: task cargo:cargo_ndk
-      - name: generate android build from rust
-        run: task build_android
-      - name: build android
-        run: flutter build apk --split-per-abi
+      - name: install cargo xcode
+        if: steps.cargo-xcode.outputs.cache-hit != 'true'
+        run: task cargo:cargo_xcode
+      - name: generate macos build from rust
+        run: task build_macos
+      - name: build macos
+        run: flutter build macos --verbose
+
+  # build-android:
+  #   runs-on: macos-latest
+  #   steps:
+  #     - uses: actions/cache@v3
+  #       id: cache-deps
+  #       with:
+  #         path: |
+  #           /Users/runner/hostedtoolcache/flutter
+  #           ~/.cargo/bin/
+  #           ~/.cargo/registry/index/
+  #           ~/.cargo/registry/cache/
+  #           ~/.cargo/git/db/
+  #         key: ${{ runner.OS }}-cargo-install-cache-v1}}
+  #     - uses: actions/cache@v3
+  #       id: cargo-ndk
+  #       with:
+  #         path: |
+  #           ~/.cargo/bin/cargo-ndk
+  #         key: ${{ runner.OS }}-cargo-ndk-cache-${{env.cargo_ndk}}
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: "3.3.10"
+  #         channel: "stable"
+  #     - uses: actions/setup-java@v3
+  #       with:
+  #         distribution: 'zulu'
+  #         java-version: "12.x"
+  #     - uses: actions/checkout@v3
+  #     - name: Install Task
+  #       run: |
+  #         sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+  #         echo "${HOME}/.local/bin" >> $GITHUB_PATH
+  #     - name: Clean & Get Flutter dependencies
+  #       run: |
+  #         flutter clean
+  #         flutter pub get
+  #     - name: Setup | Rust
+  #       uses: ATiltedTree/setup-rust@v1
+  #       with:
+  #         rust-version: stable
+  #         components: clippy
+  #     - name: rustup target
+  #       run: |
+  #         rustup show
+  #         rustup target add aarch64-linux-android
+  #         rustup target add armv7-linux-androideabi
+  #         rustup target add x86_64-linux-android
+  #         rustup target add i686-linux-android
+  #     - name: install cargo ndk
+  #       if: steps.cargo-ndk.outputs.cache-hit != 'true'
+  #       run: task cargo:cargo_ndk
+  #     - name: generate android build from rust
+  #       run: task build_android
+  #     - name: build android
+  #       run: flutter build apk --split-per-abi
 
   # build-ios:
   #   runs-on: macos-latest
