@@ -215,6 +215,10 @@ jobs:
           flutter-version: "3.3.10"
           channel: "stable"
       - uses: actions/checkout@v3
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          version: 3.x
       - name: List file is repo
         run: |
           ls -a
@@ -234,8 +238,8 @@ jobs:
           rustup target add x86_64-apple-ios
       - name: install cargo lipo
         if: steps.cache-lipo.outputs.cache-hit != 'true'
-        run: cargo install cargo-lipo
+        run: task cargo:cargo_lipo
       - name: generate ios build from rust
-        run: make ios-build
+        run: task build_ios
       - name: build ios
         run: flutter build ios --no-codesign

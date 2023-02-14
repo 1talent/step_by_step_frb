@@ -15,7 +15,7 @@ tasks:
     cmds:
       - task cargo:frb_gen cargo:cargo_xcode cargo:cargo_ndk cargo:cargo_lipo
 
-  build_ios:
+  build_gen_ios:
     cmds: 
       - flutter_rust_bridge_codegen
        -r {{.RUST_API_PATH}} 
@@ -23,8 +23,12 @@ tasks:
        --dart-decl-output {{.DART_DECL_PATH}}
        -c ios/Runner/bridge_generated.h;
       - cd {{.RUST_DIR}} && cargo lipo && cp target/universal/debug/lib{{.BUILD_NAME}}.a ../ios/Runner;
-  
-  build_android:
+
+  build_ios:
+    cmds: 
+      - cd {{.RUST_DIR}} && cargo lipo && cp target/universal/debug/lib{{.BUILD_NAME}}.a ../ios/Runner;
+
+  build_gen_android:
     cmds:
       - flutter_rust_bridge_codegen
        -r {{.RUST_API_PATH}} 
@@ -33,7 +37,14 @@ tasks:
       - cd {{.RUST_DIR}} && cargo ndk 
         -t x86 -t armeabi-v7a -t arm64-v8a -t x86_64 
         -o ../android/app/src/main/jniLibs build;
-  build_macos:
+
+  build_android:
+    cmds:
+      - cd {{.RUST_DIR}} && cargo ndk 
+        -t x86 -t armeabi-v7a -t arm64-v8a -t x86_64 
+        -o ../android/app/src/main/jniLibs build;  
+
+  build_gen_macos:
     cmds:
       - flutter_rust_bridge_codegen
        -r {{.RUST_API_PATH}} 
@@ -41,3 +52,7 @@ tasks:
        --dart-decl-output {{.DART_DECL_PATH}}
        -c macos/Runner/bridge_generated.h;
       - cd {{.RUST_DIR}} && cargo xcode;   
+
+  build_macos:
+    cmds:
+      - cd {{.RUST_DIR}} && cargo xcode;
