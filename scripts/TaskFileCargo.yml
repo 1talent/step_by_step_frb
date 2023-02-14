@@ -1,0 +1,24 @@
+version:  3
+
+vars:
+  FRB_CODEGEN: 1.56.0
+  CARGO_XCODE: 1.5.0
+  CARGO_NDK: 2.12.6
+  CARGO_LIPO: 3.2.0
+
+tasks:
+  frb_gen: 
+    cmds: 
+     - cargo install flutter_rust_bridge_codegen@{{.FRB_CODEGEN}}; 
+
+  cargo_xcode:
+    cmds:
+      - cargo install cargo-xcode@{{.CARGO_XCODE}}
+
+  cargo_ndk: 
+    cmds:
+      - cargo install cargo-ndk@{{.CARGO_NDK}}
+
+  cargo_lipo: 
+    cmds:
+      - cargo install cargo-lipo@{{.CARGO_LIPO}}

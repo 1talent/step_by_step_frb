@@ -1,35 +1,19 @@
 version:  3
 
+includes:
+  cargo: './scripts/TaskFileCargo.yml'
+
 vars:
   RUST_DIR: src_rust
   RUST_API_PATH: "{{.RUST_DIR}}/src/api.rs"
   DART_LIB_PATH: lib/bridge_generated.dart 
   DART_DECL_PATH: lib/bridge_definitions.dart
   BUILD_NAME : step
-  FRB_CODEGEN: 1.56.0
-  CARGO_XCODE: 1.5.0
-  CARGO_NDK: 2.12.6
-  CARGO_LIPO: 3.2.0
 
 tasks:
   local_install_crates:
     cmds:
-      - task frb_gen cargo_xcode cargo_ndk cargo_lipo
-  frb_gen: 
-    cmds: 
-     - cargo install flutter_rust_bridge_codegen@{{.FRB_CODEGEN}}; 
-
-  cargo_xcode:
-    cmds:
-      - cargo install cargo-xcode@{{.CARGO_XCODE}}
-
-  cargo_ndk: 
-    cmds:
-      - cargo install cargo-ndk@{{.CARGO_NDK}}
-
-  cargo_lipo: 
-    cmds:
-      - cargo install cargo-lipo@{{.CARGO_LIPO}}
+      - task cargo:frb_gen cargo:cargo_xcode cargo:cargo_ndk cargo:cargo_lipo
 
   build_ios:
     cmds: 
