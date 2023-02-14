@@ -216,9 +216,10 @@ jobs:
           channel: "stable"
       - uses: actions/checkout@v3
       - name: Install Task
-        uses: arduino/setup-task@v1
-        with:
-          version: 3.x
+        run: |
+          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin
+          export PATH="$HOME/.local/bin:$PATH"
+          task --version
       - name: List file is repo
         run: |
           ls -a
