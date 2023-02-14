@@ -38,7 +38,7 @@ tasks:
        -d {{.DART_LIB_PATH}}
        --dart-decl-output {{.DART_DECL_PATH}}
        -c ios/Runner/bridge_generated.h;
-      - cd {{.RUST_DIR}} && cargo lipo && cp target/universal/debug/hellohq.a ../ios/Runner;
+      - cd {{.RUST_DIR}} && cargo lipo && cp target/universal/debug/lib{{.BUILD_NAME}}.a ../ios/Runner;
   
   build_android:
     cmds:
